@@ -1,57 +1,38 @@
-int cols;
-int rows;
 int w = 5;
 PImage map;
 float scale = 1.5;
-float xPan = 1000;
-float yPan = 500;
+float xPan;
+float yPan;
 boolean zoomIn = false;
 boolean zoomOut = false;
-boolean panUp = false;
-boolean panDown = false;
-boolean panLeft = false;
-boolean panRight = false;
 
 void setup()
 {
-  
     fullScreen();
     map = loadImage("map.jpg");
 }
 
 void draw()
 {
-  translate(width/2, height/2);
   scale(scale);
-   translate(-xPan, -yPan);
- 
+  translate(xPan, yPan);
+  text(xPan, 0, 0);
+  background(43, 182, 115);
   image(map, 0, 0, width, height);
-  //zoom = map(mouseY, 0,height,0,5);
-    noFill();
+    color building = get(500, 455);
     for(int i = w; i < width - w; i = i + w){
       for(int j = w; j < height - w; j = j + w){
-      strokeWeight(1/scale);
+      strokeWeight(.5);
+      noFill(); 
       rect(i,j,w,w);
       }
-    } 
+    }
     
     if(zoomIn) {
       scale *= 1.01;
     }
     if(zoomOut) {
       scale /= 1.01;
-    }
-    if(panUp) {
-      yPan -= 10;
-    }
-    if(panDown) {
-      yPan += 10;
-    }
-    if(panRight) {
-      xPan += 10;
-    }
-    if(panLeft) {
-      xPan -= 10;
     }
 }
 
@@ -63,43 +44,21 @@ void keyPressed(){
   if(keyCode == DOWN){
     zoomOut = true;
     zoomIn = false;
-  }
-  if(key == 'w'){
-    panUp = true;
-    panDown = false;
-  }
-  if(key == 's'){
-    panUp = false;
-    panDown = true;
-  }
-  if(key == 'a'){
-    panLeft = true;
-    panRight = false;
-  }
-  if(key == 'd'){
-    panLeft = false;
-    panRight = true;
-  }
+  } 
 }
   
-  void keyReleased(){
+void keyReleased(){
   if(keyCode == UP){
     zoomIn = false;
   }
   if(keyCode == DOWN){
     zoomOut = false;
-  }
-  if(key == 'w'){
-    panUp = false;
-  }
-  if(key == 's'){
-    panDown = false;
-  }
-  if(key == 'a'){
-    panLeft = false;
-  }
-  if(key == 'd'){
-    panRight = false;
-  }
+  } 
+}
   
+void mouseDragged(){
+  xPan = xPan + (mouseX - pmouseX);
+  xPan = constrain(xPan, -width/3, 0);
+  yPan = yPan + (mouseY - pmouseY);
+  yPan = constrain(yPan, -height/3, 0);
 }
